@@ -1,0 +1,213 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Prospectus Base
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+  - multipart/form-data
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /regulator/baseprospectus:
+    x-swagger-router-controller: prospectus_base
+    get:
+      summary: Returns all available base prospectus
+      # used as the method name of the controller
+      operationId: getProspectus
+      responses:
+        200:
+          description: List of all Base Prospectus
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/GetProspectusItem'
+        400:
+          description: Bad input parameter
+    post:
+      summary: Creates a new Prospectus Base.
+      operationId: createProspectus
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: numRegRequest
+          type: string
+          required: true
+        - in: formData
+          name: issuingBank
+          type: number
+          required: true
+        - in: formData
+          name: registrationDate
+          type: string
+          required: true
+        - in: formData
+          name: nominalMax
+          type: number
+          required: true
+        - in: formData
+          name: authorized
+          type: string
+          required: true
+        - in: formData
+          name: userDoc
+          type: string
+          required: true
+        - in: formData
+          name: document
+          type: file
+          required: true
+      responses:
+        201:
+          description: Item created
+        400:
+          description: Bad input
+  /regulator/baseprospectus/{id}:
+    x-swagger-router-controller: prospectus_base
+    get:
+      summary: Returns the information of a base prospectus by {id}
+      # used as the method name of the controller
+      operationId: getProspectusById
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+      responses:
+        200:
+          description: Data of the prospectus
+          schema:
+            $ref: '#/definitions/GetProspectusItemId'
+        400:
+          description: Bad input parameter
+        
+      
+  /swagger:
+    x-swagger-pipe: swagger_raw
+
+# complex objects have schema definitions
+definitions:
+
+  GetProspectusItem:
+    type: object
+    required:
+    - baseProspectusId
+    - numRegRequest
+    - issuingBank
+    - registrationDate
+    - nominalMax
+    - authorized
+    - documentation
+    - isValidStatus
+    - isValid
+    properties:
+      baseProspectusId:
+        type: string
+        example: m9lj12u37162t3g2hj3wh
+      numRegRequest:
+        type: string
+        example: regZS0001
+      issuingBank:
+        type: string
+        example: Santander
+      registrationDate:
+        type: string
+        example: 27/01/2018
+      nominalMax:
+        type: number
+        example: 3500000
+      isValid:
+        description: If the prospectus is active or finished
+        type: boolean
+        example: true
+      isValidStatus:
+        type: string
+        example: Activo
+      authorized:
+        $ref: '#/definitions/Authorized'
+      documentation:
+        $ref: '#/definitions/BaseProspectusDoc'
+
+  Authorized:
+    type: array
+    items:
+      type: object
+      required: 
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          example: 123192Q
+        name: 
+          type: string
+          example: Jorge Baumann
+  
+  BaseProspectusDoc:
+    type: object
+    properties:
+      url:
+        type: string
+        example: www.google.com
+      date:
+        type: string
+        description: Date when the document was uploaded 
+        example: 28/01/2012
+      user:
+        type: string
+        description: User who uploaded the document
+        
+  GetProspectusItemId:
+    type: object
+    properties:
+      baseProspectusId:
+        type: string
+        example: m9lj12u37162t3g2hj3wh
+      numRegRequest:
+        type: string
+        example: regZS0001
+      issuingBank:
+        type: string
+        example: Santander
+      registrationDate:
+        type: string
+        example: 27/01/2018
+      nominalMax:
+        type: number
+        example: 3500000
+      isValid:
+        description: If the prospectus is active or finished
+        type: boolean
+        example: true
+      isValidStatus:
+        type: string
+        example: Active
+      authorized:
+        $ref: '#/definitions/Authorized'
+      documentation:
+        $ref: '#/definitions/BaseProspectusDoc'
+    required:
+    - baseProspectusId
+    - numRegRequest
+    - issuingBank
+    - registrationDate
+    - nominalMax
+    - authorized
+    - documentation
+    - isValidStatus
+    - isValid
+      
+
+
+
