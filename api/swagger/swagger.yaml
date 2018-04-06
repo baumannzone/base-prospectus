@@ -41,31 +41,11 @@ paths:
         - multipart/form-data
       parameters:
         - in: formData
-          name: numRegRequest
+          name: prospectusData
           type: string
           required: true
         - in: formData
-          name: issuingBank
-          type: number
-          required: true
-        - in: formData
-          name: registrationDate
-          type: string
-          required: true
-        - in: formData
-          name: nominalMax
-          type: number
-          required: true
-        - in: formData
-          name: authorized
-          type: string
-          required: true
-        - in: formData
-          name: userDoc
-          type: string
-          required: true
-        - in: formData
-          name: document
+          name: prospectusDocument
           type: file
           required: true
       responses:
@@ -91,8 +71,49 @@ paths:
             $ref: '#/definitions/GetProspectusItemId'
         400:
           description: Bad input parameter
-        
-      
+    put:
+      summary: Update the information of a base prospectus by {id}
+      operationId: updateProspectusById
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+        - in: formData
+          name: numRegRequest
+          type: string
+          required: false
+        - in: formData
+          name: issuingBank
+          type: number
+          required: false
+        - in: formData
+          name: registrationDate
+          type: string
+          required: false
+        - in: formData
+          name: nominalMax
+          type: number
+          required: false
+        - in: formData
+          name: authorized
+          type: string
+          required: false
+        - in: formData
+          name: userDoc
+          type: string
+          required: false
+        - in: formData
+          name: document
+          type: file
+          required: false
+      responses:
+        200:
+          description: Item created
+        400:
+          description: Bad input
   /swagger:
     x-swagger-pipe: swagger_raw
 
@@ -178,8 +199,8 @@ definitions:
         type: string
         example: regZS0001
       issuingBank:
-        type: string
-        example: Santander
+        type: number
+        example: 2
       registrationDate:
         type: string
         example: 27/01/2018
@@ -208,6 +229,3 @@ definitions:
     - isValidStatus
     - isValid
       
-
-
-

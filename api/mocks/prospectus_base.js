@@ -69,14 +69,14 @@ function createProspectus( req, res, next ) {
     user: req.body.userDoc,
     date: req.body.registrationDate,
   };
-  res.json( { code: 201, data: item } );
+  res.json( item );
 }
 
 function getProspectusById( req, res, next ) {
   const item = {
     baseProspectusId: 'h372612raKJ',
     numRegRequest: 'Reg002',
-    issuingBank: 'Caixa',
+    issuingBank: 2,
     registrationDate: '27/03/2018',
     nominalMax: 350000,
     isValid: true,
@@ -92,7 +92,7 @@ function getProspectusById( req, res, next ) {
       },
     ],
     documentation: {
-      url: 'link',
+      url: 'folletoBase.pdf',
       date: '27/03/2018',
       user: 'Kate Cook',
     },
